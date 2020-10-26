@@ -9,9 +9,9 @@ start = timeit.default_timer()
 out = open("digest.out", "w", encoding='utf-8')
 
 def scrap(i, start, end):
+	idx = start
 	try:
 		print(i,start,end)
-		idx = start
 
 		url = "https://www.challengecybersec.fr/9bcb53d26eab7e9e08cc9ffae4396b48/blog/post/"
 
@@ -36,7 +36,8 @@ def scrap(i, start, end):
 			idx += 1
 			print(str(idx)+" thread:"+str(i))
 			response = get(url+str(idx))
-			
+
+		print("[FINISHED] Thread:", i)
 	except:
 		print("-------------------------------------")
 		print("i :",i)
@@ -47,24 +48,22 @@ def scrap(i, start, end):
 
 #### threading ####
 start = 1
-end = 1000/10
+end = 1000/20
 
 encryption = []
 
-for i in range(10):
+for i in range(20):
 	encryption.append("") 
 
 threads = []
 
-for i in range(0,10):
+for i in range(0,20):
 	t = Thread(target=scrap, args=[i, start, end])
 	
-	if i == 0:
-		start += 99
-	else:
-		start += 100
+	start += 50
 
-	end += 100
+	end += 50
+
 	threads.append(t)
 	t.start()
 
