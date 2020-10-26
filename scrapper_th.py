@@ -4,22 +4,33 @@ import hashlib
 import timeit
 from threading import Thread
 
-start = timeit.default_timer()
+# GLOVAL VARIABLE
+OKGREEN = '\033[92m'
+WHITE = '\033[0m'
 
+# start timer
+start_timer = timeit.default_timer()
+
+# open output file
 out = open("digest.out", "w", encoding='utf-8')
 
+# scrapper function, called in each thread
 def scrap(i, start, end):
 	idx = start
 	try:
 		print(i,start,end)
 
+		# url tho scrap from
 		url = "https://www.challengecybersec.fr/9bcb53d26eab7e9e08cc9ffae4396b48/blog/post/"
 
 		response = get(url+str(idx))
 
 		source = None
 
-		while response.status_code != 404 or idx >= end:
+		while response.status_code != 404:
+			if idx >= end:
+				break
+
 			source = response.text
 			selector = Selector(text=source)
 			digest = selector.xpath('//span/text()').extract()
@@ -37,7 +48,7 @@ def scrap(i, start, end):
 			print(str(idx)+" thread:"+str(i))
 			response = get(url+str(idx))
 
-		print("[FINISHED] Thread:", i)
+		print(OKGREEN+"[FINISHED] Thread:"+WHITE, i)
 	except:
 		print("-------------------------------------")
 		print("i :",i)
@@ -61,7 +72,6 @@ for i in range(0,20):
 	t = Thread(target=scrap, args=[i, start, end])
 	
 	start += 50
-
 	end += 50
 
 	threads.append(t)
@@ -72,19 +82,19 @@ for thread in threads:
 	thread.join()
 
 
-
-
 #### encryption
 
 toEncrypt = ""
+
 for s in encryption:
 	toEncrypt += str(s)
 
+print(toEncrypt)
+
+res = hashlib.md5(toEncrypt.encode('utf-8'))
+
 out.write(toEncrypt)
 out.write("\n")
-
-print(toEncrypt)
-res = hashlib.md5(toEncrypt.encode('utf-8'))
 
 out.write("hexadecimal digest : \n")
 out.write(str(res.hexdigest()))
@@ -94,6 +104,7 @@ out.write("digest : \n")
 out.write(str(res.digest()))
 
 
+### stop timer
 stop = timeit.default_timer()
 
-print("time: ", stop-start)
+print("time: ", stop-start_timer)
