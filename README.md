@@ -1,5 +1,6 @@
 # Web-scrapper-CTF-DGSE-ESSIE
-Multi threaded web scrapper created to pass a step in a CTF. ( https://www.challengecybersec.fr )
+Multi threaded web scrapper created to pass a step in a CTF.<br>
+( https://www.challengecybersec.fr ) website no longer hosted.
 
 <br>
 Multi threaded web scrapper created to pass a step in on the DGSE CTF. <br>
